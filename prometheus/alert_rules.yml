@@ -1,14 +1,14 @@
 groups:
   - name: alert_rules
     rules:
-      - alert: Dagster Unreachable
-        expr: probe_success{instance="http://192.168.1.100:8080"} == 0
-        for: 30s
-        labels:
-          severity: critical
-        annotations:
-          # summary: "Dasgter is Down"
-          description: "Dagster container crashed"
+      # - alert: Dagster Unreachable
+      #   expr: probe_success{instance="http://192.168.1.100:8080"} == 0
+      #   for: 30s
+      #   labels:
+      #     severity: critical
+      #   annotations:
+      #     # summary: "Dasgter is Down"
+      #     description: "Dagster container crashed"
 
       - alert: High CPU Utilization
         expr: 100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[1m])) * 100) > 10

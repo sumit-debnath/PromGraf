@@ -11,7 +11,7 @@ receivers:
       - send_resolved: true
         username: 'AlertManager'
         channel: '#alertmanaget-test'
-        api_url: 'https://hooks.slack.com/services/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'
+        api_url: {{ slack_api_url }}
         title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] Monitoring Event Notification'
         # title: "[{{ .Status | toUpper }}] {{ .GroupLabels.alertname }}"
         text: "<!channel> \n*Alert:* {{ .GroupLabels.alertname }} - `{{ .CommonLabels.severity }}`\n*Description:* {{ .CommonAnnotations.description }}"

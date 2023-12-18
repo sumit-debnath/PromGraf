@@ -10,6 +10,7 @@ services:
       - ./prometheus:/etc/prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--collector.systemd"
 
   alertmanager:
     image: prom/alertmanager
@@ -19,6 +20,8 @@ services:
       - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
     command:
       - "--config.file=/etc/alertmanager/alertmanager.yml"
+    depends_on:
+      - prometheus
 
   grafana:
     image: grafana/grafana
@@ -31,8 +34,34 @@ services:
     depends_on:
       - prometheus
 
-  blackbox-exporter:
-    image: blackbox-exporter
-    ports:
-      - 9115:9115
-
+  # cadvisor:
+  #   image: gcr.io/cadvisor/cadvisor:latest
+  #   container_name: cadvisor
+  #   ports:
+  #   - 8881:8080
+  #   volumes:
+  #   - /:/rootfs:ro
+  #   - /var/run:/var/run:rw
+  #   - /sys:/sys:ro
+  #   - /var/lib/docker/:/var/lib/docker:ro
+  # blackbox-exporter:
+  #   build:
+  #     context: ./blackbox_exporter
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 9115:9115
+  # node-exporter:
+  #   image: prom/node-exporter
+  #   container_name: node-exporter
+  #   command:
+  #     - --path.procfs=/host/proc
+  #     - --path.sysfs=/host/sys
+  #     - --collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)
+  #     - --web.listen-address=:9100
+  #     - --web.telemetry-path=/metrics
+  #   ports:
+  #     - "9100:9100"
+  #   labels:
+  #     - "prometheus.instance=${HOSTNAME}"
+  #   network_mode: host
+  #   restart: always
